@@ -7,7 +7,7 @@ import About from "./routes/about.js";
 import NotFound from "./routes/404.js";
 
 function App() {
-	return html`
+  return html`
 		<${LocationProvider}>
 			<${Navbar} />
 			<main>

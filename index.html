@@ -1,38 +1,44 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1" />
-		<title>TIPS</title>
-		<link rel="shortcut icon" href="favicon.ico">
-		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/1.0.4/css/bulma.min.css" integrity="sha512-yh2RE0wZCVZeysGiqTwDTO/dKelCbS9bP2L94UvOFtl/FKXcNAje3Y2oBg/ZMZ3LS1sicYk4dYVGtDex75fvvA==" crossorigin="anonymous" referrerpolicy="no-referrer">
-		<script>
-			// Apply the saved theme before first paint to avoid a flash.
-			// "system" => no data-theme attribute (Bulma's prefers-color-scheme rules apply).
-			(function () {
-				try {
-					var theme = localStorage.getItem("theme") || "system";
-					if (theme === "light" || theme === "dark") {
-						document.documentElement.dataset.theme = theme;
-					}
-				} catch (e) {}
-			})();
-		</script>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>TIPS</title>
+    <link rel="shortcut icon" href="favicon.ico" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/bulma/1.0.4/css/bulma.min.css"
+      integrity="sha512-yh2RE0wZCVZeysGiqTwDTO/dKelCbS9bP2L94UvOFtl/FKXcNAje3Y2oBg/ZMZ3LS1sicYk4dYVGtDex75fvvA=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <script>
+      // Apply the saved theme before first paint to avoid a flash.
+      // "system" => no data-theme attribute (Bulma's prefers-color-scheme rules apply).
+      (function () {
+        try {
+          var theme = localStorage.getItem("theme") || "system";
+          if (theme === "light" || theme === "dark") {
+            document.documentElement.dataset.theme = theme;
+          }
+        } catch (e) {}
+      })();
+    </script>
 
-		<script type="importmap">
-			{
-				"imports": {
-					"preact": "https://esm.sh/preact@11.0.2",
-					"preact/": "https://esm.sh/preact@11.0.2/",
-					"@preact/signals": "https://esm.sh/@preact/signals@2.11.3?external=preact",
-					"htm/preact": "https://esm.sh/htm@3.1.1/preact?external=preact",
-					"preact-iso": "https://esm.sh/preact-iso@2.12.2?external=preact"
-				}
-			}
-		</script>
-	</head>
-	<body>
-		<div id="app"></div>
-		<script type="module" src="/src/app.js"></script>
-	</body>
+    <script type="importmap">
+      {
+        "imports": {
+          "preact": "https://esm.sh/preact@11.0.2",
+          "preact/": "https://esm.sh/preact@11.0.2/",
+          "@preact/signals": "https://esm.sh/@preact/signals@2.11.3?external=preact",
+          "htm/preact": "https://esm.sh/htm@3.1.1/preact?external=preact",
+          "preact-iso": "https://esm.sh/preact-iso@2.12.2?external=preact"
+        }
+      }
+    </script>
+  </head>
+  <body>
+    <div id="app"></div>
+    <script type="module" src="/src/app.js"></script>
+  </body>
 </html>
