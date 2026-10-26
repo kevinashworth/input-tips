@@ -1,6 +1,7 @@
 import { html } from "htm/preact";
 import { signal, useSignal } from "@preact/signals";
 
+import { withBase } from "../base.js";
 import NumericInputTwoDigits from "../components/numeric-input-two-digits.js";
 
 const showBulmaInputClass = signal(true);
@@ -52,7 +53,7 @@ export default function Home() {
             Try them in <b>dark mode</b> too: the native number field keeps its light-colored arrows, while the TIPS
             input does not.
           </p>
-          <p><a href="/about">Read more about TIPS and this demo</a></p>
+          <p><a href=${withBase("/about")}>Read more about TIPS and this demo</a></p>
         </div>
         <div class="fixed-grid has-2-cols">
           <div class="grid">

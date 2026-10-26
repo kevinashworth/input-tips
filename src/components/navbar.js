@@ -2,12 +2,16 @@ import { useEffect, useRef, useState } from "preact/hooks";
 import { html } from "htm/preact";
 import { useLocation } from "preact-iso";
 import { theme, resolvedTheme, setTheme } from "../theme.js";
+import { BASE, withBase } from "../base.js";
 
 import MoonIcon from "../icons/moon.js";
 import SunIcon from "../icons/sun.js";
 import SystemIcon from "../icons/system.js";
 
 const LABELS = { system: "System", light: "Light", dark: "Dark" };
+const HOME = withBase("/");
+const HOME_PATH = BASE || "/";
+const ABOUT = withBase("/about");
 
 export function Navbar() {
   const { path, route } = useLocation();
@@ -74,8 +78,13 @@ export function Navbar() {
             </div>
           </div>
         </div>
-        <a class="navbar-item ${path === "/" ? "is-active" : ""}" href="/" onClick=${(e) => go(e, "/")}>Home</a>
-        <a class="navbar-item ${path === "/about" ? "is-active" : ""}" href="/about" onClick=${(e) => go(e, "/about")}
+        <a
+          class="navbar-item ${path === HOME_PATH ? "is-active" : ""}"
+          href=${HOME}
+          onClick=${(e) => go(e, HOME)}
+          >Home</a
+        >
+        <a class="navbar-item ${path === ABOUT ? "is-active" : ""}" href=${ABOUT} onClick=${(e) => go(e, ABOUT)}
           >About TIPS</a
         >
       </div>

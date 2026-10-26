@@ -19,11 +19,11 @@ No build command, no npm install, and no Python in production. `serve.py` and
 `test_serve.py` are local-development tools only. Dependencies continue to load
 from esm.sh and cdnjs unless you follow [VENDORING.md](VENDORING.md) first.
 
-The app currently assumes it is served from the site root: `index.html` loads
-`/src/app.js` and `/favicon.ico`, and the router uses paths such as `/about`.
-Deploying under a subpath (for example `/input-tips/` or `/tips/`) requires the
-base-path changes described in [Option E2](#e2-copy-the-app-into-publictips-as-a-same-origin-page).
-A subdomain or custom domain avoids the issue entirely.
+The app reads its base path from the `<base>` tag in `index.html`. It defaults
+to `/` for local development and root deployments; the Pages workflow rewrites
+it to the repository subpath when publishing a project site. When copying the
+app somewhere else, set that tag to the new path (see
+[Option E2](#e2-copy-the-app-into-publictips-as-a-same-origin-page)).
 
 ## Option A: GitHub Pages
 
@@ -38,8 +38,15 @@ branch → `main` → `/root`. This publishes the whole repository, including
 ### A2. Publish only the static subset with Actions
 
 This publishes just `index.html`, `favicon.ico`, and `src/`, so the server code
-and docs stay out of the site. Create
-`.github/workflows/pages.yml`:
+and docs stay out of the site.
+
+Before the first run, enable Pages and set its source to **GitHub Actions**:
+Settings → Pages → Build and deployment → Source → GitHub Actions. The deploy
+step cannot create the site itself; if Pages is disabled or still set to branch
+deployment, `actions/deploy-pages` fails with
+`Failed to create deployment (status: 404)`.
+
+Create `.github/workflows/pages.yml`:
 
 ```yaml
 name: Deploy to GitHub Pages
@@ -89,13 +96,14 @@ jobs:
         uses: actions/deploy-pages@v4
 ```
 
-Then set Pages → Build and deployment → Source to **GitHub Actions**. The
-workflow runs on every push to `main`, or manually via **Run workflow**.
+The workflow runs on every push to `main`, or manually via **Run workflow**.
 
-The assembly step creates the `404.html` copy in the artifact, so Pages serves
-the app shell for unknown paths and client-side routes survive a hard refresh.
-It deliberately copies `src/` as a directory; anything else in the repo is not
-published.
+The workflow asks `actions/configure-pages` for the site's base path and
+rewrites the `<base>` tag in the copied `index.html` accordingly (for example
+`/input-tips/` for a project site, or `/` for a custom domain). It then creates
+the `404.html` copy, so Pages serves the app shell for unknown paths and
+client-side routes survive a hard refresh. It deliberately copies `src/` as a
+directory; anything else in the repo is not published.
 
 If you use a custom domain, add it to the artifact before upload:
 
@@ -108,10 +116,9 @@ and configure the DNS records in the repository's Pages settings.
 ### GitHub Pages caveats
 
 - **Project pages use a subpath.** `https://<user>.github.io/<repo>/` is not the
-  site root, so the app's root-absolute assets and routes break. Use a custom
-  domain, a user/org root site, or apply the base-path changes from
-  [Option E2](#e2-copy-the-app-into-publictips-as-a-same-origin-page) (using the
-  repository name as the prefix).
+  site root. A2 handles this by rewriting the `<base>` tag; A1 does not, so use
+  a custom domain or root site with A1, or set the base tag to `/<repo>/`
+  yourself (see [Option E2](#e2-copy-the-app-into-publictips-as-a-same-origin-page)).
 - **Deep links return HTTP 404.** `404.html` renders the app, but the status
   code is still 404. Acceptable for a demo; weaker for SEO.
 
@@ -219,34 +226,14 @@ mkdir -p public/tips
 cp -R index.html favicon.ico src public/tips/
 ```
 
-Then make three changes so the app does not escape `/tips/`:
+Then set the base tag in the copy:
 
-1. In `public/tips/index.html`, change the root-absolute asset references to
-   relative ones:
+```html
+<base href="/tips/" />
+```
 
-   ```html
-   <link rel="shortcut icon" href="./favicon.ico" />
-   <script type="module" src="./src/app.js"></script>
-   ```
-
-2. In `public/tips/src/app.js`, scope the router and prefix the route paths:
-
-   ```js
-   <${LocationProvider} scope="/tips">
-     ...
-     <${Route} path="/tips" component=${Home} />
-     <${Route} path="/tips/about" component=${About} />
-     <${Route} default component=${NotFound} />
-   ```
-
-3. In `public/tips/src/components/navbar.js` and `public/tips/src/routes/404.js`,
-   change links, active checks, and `route()` calls to use the `/tips/` prefix
-   (for example `href="/tips/"` and `route("/tips/about")`).
-
-Use a trailing slash on the home link (`/tips/`). Relative asset paths resolve
-from the current directory, so `/tips/about` and `/tips/` both load
-`/tips/src/app.js`, but a link to `/tips` (no slash) would look for
-`/src/app.js`.
+The module script is already loaded relative to that base, and the app derives
+its routes and links from `document.baseURI`, so no source edits are needed.
 
 The Astro dev server serves `/tips/`, but it will not handle deep links such as
 `/tips/about` unless your host rewrites them. Scope the fallback from Option B
@@ -270,9 +257,9 @@ asset. GitHub Pages cannot scope a `404.html` to a subdirectory, so use E1 there
 instead. Test deep links on the deployed host, not in `astro dev`, because the
 dev server does not apply these rewrite rules.
 
-`public/tips/` is a copy of the app, so re-copy it and reapply the base-path
-edits whenever the source app changes. If that maintenance burden is unwanted,
-use E1.
+`public/tips/` is a copy of the app, so re-copy it and reapply the `<base>` tag
+whenever the source app changes. If that maintenance burden is unwanted, use
+E1.
 
 ## Optional CI
 
