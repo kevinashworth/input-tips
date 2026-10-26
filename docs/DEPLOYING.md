@@ -38,8 +38,15 @@ branch → `main` → `/root`. This publishes the whole repository, including
 ### A2. Publish only the static subset with Actions
 
 This publishes just `index.html`, `favicon.ico`, and `src/`, so the server code
-and docs stay out of the site. Create
-`.github/workflows/pages.yml`:
+and docs stay out of the site.
+
+Before the first run, enable Pages and set its source to **GitHub Actions**:
+Settings → Pages → Build and deployment → Source → GitHub Actions. The deploy
+step cannot create the site itself; if Pages is disabled or still set to branch
+deployment, `actions/deploy-pages` fails with
+`Failed to create deployment (status: 404)`.
+
+Create `.github/workflows/pages.yml`:
 
 ```yaml
 name: Deploy to GitHub Pages
@@ -89,8 +96,7 @@ jobs:
         uses: actions/deploy-pages@v4
 ```
 
-Then set Pages → Build and deployment → Source to **GitHub Actions**. The
-workflow runs on every push to `main`, or manually via **Run workflow**.
+The workflow runs on every push to `main`, or manually via **Run workflow**.
 
 The assembly step creates the `404.html` copy in the artifact, so Pages serves
 the app shell for unknown paths and client-side routes survive a hard refresh.
