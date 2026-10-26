@@ -57,7 +57,7 @@ class ServeTest(unittest.TestCase):
         self.assertIn("text/html", ctype)
 
     def test_routes_fall_back_to_index(self):
-        for path in ("/about", "/about/", "/deep/nested", "/doesnotexist", "/about?x=1"):
+        for path in ("/about", "/about/", "/deep/nested", "/nope", "/about?x=1"):
             with self.subTest(path=path):
                 status, ctype = self.request(path)
                 self.assertEqual(status, 200)
