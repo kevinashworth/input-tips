@@ -1,6 +1,7 @@
 import { render } from "preact";
 import { html } from "htm/preact";
 import { LocationProvider, Router, Route, ErrorBoundary } from "preact-iso";
+import { withBase } from "./base.js";
 import { Navbar } from "./components/navbar.js";
 import Home from "./routes/home.js";
 import About from "./routes/about.js";
@@ -13,8 +14,8 @@ function App() {
 			<main>
 				<${ErrorBoundary}>
 					<${Router}>
-						<${Route} path="/" component=${Home} />
-						<${Route} path="/about" component=${About} />
+						<${Route} path=${withBase("/")} component=${Home} />
+						<${Route} path=${withBase("/about")} component=${About} />
 						<${Route} default component=${NotFound} />
 					<//>
 				<//>

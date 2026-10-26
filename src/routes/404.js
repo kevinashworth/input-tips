@@ -1,8 +1,10 @@
 import { html } from "htm/preact";
 import { useLocation } from "preact-iso";
+import { withBase } from "../base.js";
 
 export default function NotFound() {
   const { path, route } = useLocation();
+  const home = withBase("/");
 
   return html`
     <section class="section">
@@ -13,10 +15,10 @@ export default function NotFound() {
           <p>No route matched <code>${path}</code>.</p>
           <a
             class="button is-primary"
-            href="/"
+            href=${home}
             onClick=${(e) => {
               e.preventDefault();
-              route("/");
+              route(home);
             }}
             >Back home</a
           >
