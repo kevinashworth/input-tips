@@ -78,9 +78,6 @@ export function Navbar() {
         <a class="navbar-item ${path === "/about" ? "is-active" : ""}" href="/about" onClick=${(e) => go(e, "/about")}
           >About TIPS</a
         >
-        <a class="navbar-item ${path === "/nope" ? "is-active" : ""}" href="/nope" onClick=${(e) => go(e, "/nope")}
-          >404</a
-        >
       </div>
     </nav>
   `;

@@ -41,24 +41,18 @@ export default function Home() {
     <section class="section">
       <div class="container is-max-tablet">
         <h1 class="title">TIPS</h1>
-        <h2 class="subtitle">Why do I call it TIPS?</h2>
+        <p class="subtitle">A styled number input built from a text input.</p>
         <div class="content">
           <p>
-            This demo allows a quick comparison between an HTML input with <code>type="number"</code>, and an HTML input
-            with <code>type="text"</code>, along with <code>inputmode</code>, <code>pattern</code>, and
-            <code>size</code>
-            attributes. Which spells an acronym that I'm calling <b>TIPS</b>.
+            Compare the browser's native <code>type="number"</code> field with a TIPS input: a
+            <code>type="text"</code> field that uses <code>inputmode</code>, <code>pattern</code>, and
+            <code>size</code> to accept numbers. Change <b>count</b> anywhere below and all three controls stay in sync.
           </p>
           <p>
-            Below is bad UI/UX, but for the purposes of this demo site, <b>count</b> appears in each of the items on
-            this page, and can be controlled by all of them. Modify it one place, expect it to be updated in the other
-            places. Because my two-digit numeric input was built for a timer, it has default min and max values of 00
-            and 59. Unexpected bad-UX behavior will probably occur outside of that range.
+            Try them in <b>dark mode</b> too: the native number field keeps its light-colored arrows, while the TIPS
+            input does not.
           </p>
-          <p>
-            Be sure to look at the inputs in <b>dark mode</b>: the always-white arrows are a big part of what motivated
-            me to look into alternatives.
-          </p>
+          <p><a href="/about">Read more about TIPS and this demo</a></p>
         </div>
         <div class="fixed-grid has-2-cols">
           <div class="grid">
@@ -128,12 +122,6 @@ export default function Home() {
             <div class="cell block has-text-centered">༶ ༶ ༶ ༶ ༶ ༶ ༶</div>
           </div>
         </div>
-        <h2 class="subtitle">A Note about Arrow Keys</h2>
-        <p>
-          An HTML <code>input</code> of <code>type="number"</code> lets you increment and decrement the value of the
-          input by typing the up and down arrows. This is built-in to the browser. The same up/down functionality is
-          part of my numeric-input-two-digits.
-        </p>
       </div>
     </section>
   `;
