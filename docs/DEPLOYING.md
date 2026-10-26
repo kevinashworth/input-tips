@@ -27,20 +27,93 @@ A subdomain or custom domain avoids the issue entirely.
 
 ## Option A: GitHub Pages
 
-Free, zero build. Deploy from the repository settings (Pages → branch `main`,
-folder `/root`), or publish only the static subset with an Actions workflow.
+Free, zero build. There are two ways to publish.
 
-GitHub Pages has no rewrite configuration. Use a `404.html` copy of
-`index.html` so unknown paths boot the SPA instead of showing Pages' default
-404. With an Actions workflow, generate it as part of the publish step:
+### A1. Deploy from a branch
 
-```sh
-cp index.html 404.html
+In the repository settings, choose Pages → Build and deployment → Deploy from a
+branch → `main` → `/root`. This publishes the whole repository, including
+`docs/` and `serve.py`, which is harmless but public.
+
+### A2. Publish only the static subset with Actions
+
+This publishes just `index.html`, `favicon.ico`, and `src/`, so the server code
+and docs stay out of the site. Create
+`.github/workflows/pages.yml`:
+
+```yaml
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Run server tests
+        run: python3 -m unittest -v test_serve.py
+
+      - name: Assemble static site
+        run: |
+          mkdir -p _site
+          cp index.html favicon.ico _site/
+          cp -R src _site/src
+          cp _site/index.html _site/404.html
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
 ```
 
-Caveat: deep links return HTTP 404 even though the app renders. Acceptable for
-a demo; weaker for SEO. Also note that deploying from the branch root exposes
-`docs/`, `serve.py`, and similar files, which are harmless but public.
+Then set Pages → Build and deployment → Source to **GitHub Actions**. The
+workflow runs on every push to `main`, or manually via **Run workflow**.
+
+The assembly step creates the `404.html` copy in the artifact, so Pages serves
+the app shell for unknown paths and client-side routes survive a hard refresh.
+It deliberately copies `src/` as a directory; anything else in the repo is not
+published.
+
+If you use a custom domain, add it to the artifact before upload:
+
+```sh
+echo "tips.example.com" > _site/CNAME
+```
+
+and configure the DNS records in the repository's Pages settings.
+
+### GitHub Pages caveats
+
+- **Project pages use a subpath.** `https://<user>.github.io/<repo>/` is not the
+  site root, so the app's root-absolute assets and routes break. Use a custom
+  domain, a user/org root site, or apply the base-path changes from
+  [Option E2](#e2-copy-the-app-into-publictips-as-a-same-origin-page) (using the
+  repository name as the prefix).
+- **Deep links return HTTP 404.** `404.html` renders the app, but the status
+  code is still 404. Acceptable for a demo; weaker for SEO.
 
 ## Option B: Netlify or Cloudflare Pages
 
