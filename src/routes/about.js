@@ -1,5 +1,12 @@
 import { html } from "htm/preact";
 
+const tipsInput = `<input
+  type="text"
+  inputmode="numeric"
+  pattern="[0-9]*"
+  size={2}
+/>`;
+
 export default function About() {
   return html`
     <section class="section">
@@ -22,6 +29,7 @@ export default function About() {
             The goal is a number field that looks the same across themes and gives the developer control over its
             appearance, while still handing its parent a real <code>number</code> rather than a string.
           </p>
+          <pre class="box">${tipsInput.toString()}</pre>
 
           <h2>Why not type="number"?</h2>
           <p>
