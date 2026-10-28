@@ -23,19 +23,19 @@ export default function Home() {
   }
 
   const inputTypeNumber = `<input
-  oninput={handleChangeEvent}
-  size={2}
+  oninput=\${handleChangeEvent}
+  size=\${2}
   type="number"
-  value={count}
+  value=\${count}
 />`;
 
   const numberInputTwoDigits = `<input
   inputmode="numeric"
-  oninput={handleChangeNumber}
+  onInput=\${handleChangeNumber}
   pattern="[0-9]*"
-  size={2}
+  size=\${2}
   type="text"
-  value={count}
+  value=\${count}
 />`;
 
   return html`
@@ -53,32 +53,35 @@ export default function Home() {
             Try them in <b>dark mode</b> too: the native number field keeps its light-colored arrows, while the TIPS
             input does not.
           </p>
-          <p><a href=${withBase("/about")}>Read more about TIPS and this demo</a></p>
+          <p><a href=${withBase("/about")}>Read more about TIPS and this demo</a>.</p>
         </div>
         <div class="fixed-grid has-2-cols">
           <div class="grid">
             <div class="cell block has-text-centered">༶ ༶ ༶ ༶ ༶ ༶ ༶</div>
             <div class="cell block has-text-centered">༶ ༶ ༶ ༶ ༶ ༶ ༶</div>
+
             <div class="cell">
               <div class="box">
-                <p>count: <strong>${count}</strong></p>
-                <div class="buttons">
-                  <button class="button is-primary is-small" onClick=${() => (count.value += 1)}>Increment</button>
-                  <button class="button is-small" onClick=${() => (count.value -= 1)}>Decrement</button>
+                <div class="block title is-6">input TIPS</div>
+                <div class="block">
+                  <${NumericInputTwoDigits}
+                    class=${showBulmaInputClass.value ? "input" : ""}
+                    onInput=${handleChangeNumber}
+                    value=${count.value}
+                  />
                 </div>
               </div>
             </div>
             <div class="cell">
-              <div class="box">
-                This is a simple piece of state, built with <code>useSignal</code> from <code>@preact/signals</code>
-              </div>
+              <pre class="box">${numberInputTwoDigits.toString()}</pre>
             </div>
+
             <div class="cell block has-text-centered">༶ ༶ ༶ ༶ ༶ ༶ ༶</div>
             <div class="cell block has-text-centered">༶ ༶ ༶ ༶ ༶ ༶ ༶</div>
             <div class="cell">
               <div class="box">
-                <p>input type=number</p>
-                <div class="buttons">
+                <div class="block title is-6">input type=number</div>
+                <div class="block">
                   <input
                     class=${showBulmaInputClass.value ? "input" : ""}
                     name="input-type-number"
@@ -95,21 +98,22 @@ export default function Home() {
             </div>
             <div class="cell block has-text-centered">༶ ༶ ༶ ༶ ༶ ༶ ༶</div>
             <div class="cell block has-text-centered">༶ ༶ ༶ ༶ ༶ ༶ ༶</div>
+
             <div class="cell">
               <div class="box">
-                <p>numeric-input-two-digits (00 to 59)</p>
-                <div class="buttons">
-                  <${NumericInputTwoDigits}
-                    class=${showBulmaInputClass.value ? "input" : ""}
-                    onInput=${handleChangeNumber}
-                    value=${count.value}
-                  />
+                <div class="block title is-6">count: ${count}</p>
+                <div class="block">
+                  <button class="button is-primary is-small" onClick=${() => (count.value += 1)}>Increment</button>
+                  <button class="button is-small" onClick=${() => (count.value -= 1)}>Decrement</button>
                 </div>
               </div>
             </div>
             <div class="cell">
-              <pre class="box">${numberInputTwoDigits.toString()}</pre>
+              <div class="box">
+                This is a simple piece of state, built with <code>useSignal</code> from <code>@preact/signals</code>
+              </div>
             </div>
+
             <div class="cell block has-text-centered">༶ ༶ ༶ ༶ ༶ ༶ ༶</div>
             <div class="cell block has-text-centered">༶ ༶ ༶ ༶ ༶ ༶ ༶</div>
             <div class="cell">
