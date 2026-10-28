@@ -4,6 +4,7 @@ import { useLocation } from "preact-iso";
 import { theme, resolvedTheme, setTheme } from "../theme.js";
 import { BASE, withBase } from "../base.js";
 
+import GitHubIcon from "../icons/github.js";
 import MoonIcon from "../icons/moon.js";
 import SunIcon from "../icons/sun.js";
 import SystemIcon from "../icons/system.js";
@@ -78,15 +79,20 @@ export function Navbar() {
             </div>
           </div>
         </div>
-        <a
-          class="navbar-item ${path === HOME_PATH ? "is-active" : ""}"
-          href=${HOME}
-          onClick=${(e) => go(e, HOME)}
+        <a class="navbar-item ${path === HOME_PATH ? "is-active" : ""}" href=${HOME} onClick=${(e) => go(e, HOME)}
           >Home</a
         >
         <a class="navbar-item ${path === ABOUT ? "is-active" : ""}" href=${ABOUT} onClick=${(e) => go(e, ABOUT)}
           >About TIPS</a
         >
+        <a
+          href="https://github.com/kevinashworth/input-tips"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="navbar-item"
+        >
+          <${GitHubIcon} />
+        </a>
       </div>
     </nav>
   `;
